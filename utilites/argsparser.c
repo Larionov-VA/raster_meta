@@ -1,4 +1,4 @@
-#include "../include/get_options.h"
+#include "../include/argsparser.h"
 
 void parse_args(int argc, char* argv[], error_info_t* err, options_t* options) {
     int opt, longIndex;
@@ -15,15 +15,11 @@ void parse_args(int argc, char* argv[], error_info_t* err, options_t* options) {
                 strcpy(options->input_filename, optarg);
             }
             else {
-                err->error_state = ERR_EXTRAARGS;
-                ++err->count_of_errors;
-                strcpy(err->location, ERROR_LOCATION);
+                set_err(err, ERR_FILE, ERROR_LOCATION_ARGPARSER);
             }
             break;
         case SHORTOPT_INCORRECT_FLAG:
-            err->error_state = ERR_INCORRECT_ARG;
-            ++err->count_of_errors;
-            strcpy(err->location, ERROR_LOCATION);
+            set_err(err, ERR_FILE, ERROR_LOCATION_ARGPARSER);
             break;
         }
         opt = getopt_long(argc, argv, opts, longOpts, &longIndex);
@@ -33,10 +29,7 @@ void parse_args(int argc, char* argv[], error_info_t* err, options_t* options) {
         if (argc == 1 && !strcmp(options->input_filename, "")) {
             strcpy(options->input_filename, argv[0]);
         } else {
-            err->error_state = ERR_EXTRAARGS;
-            ++err->count_of_errors;
-            strcpy(err->location, ERROR_LOCATION);
-        }        
+            set_err(err, ERR_FILE, ERROR_LOCATION_ARGPARSER);
+        }
     }
-
 }
