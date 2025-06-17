@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 project(raster_meta)
 
-set(SOURCE_LIB main.c utilites/init_stuctures.c utilites/argsparser.c utilites/fileparser.c utilites/err.c)
+set(SOURCE_LIB main.c utilites/init_stuctures.c utilites/argsparser.c utilites/fileparser.c utilites/err.c utilites/outputinfo.c)
 
 find_package(PNG REQUIRED)
 include_directories(${PNG_INCLUDE_DIR})
