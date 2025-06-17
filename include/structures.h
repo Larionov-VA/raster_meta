@@ -1,6 +1,34 @@
 #pragma once
-#define MAX_FILENAME_LENGTH 255
 #include <png.h>
+
+#define MAX_FILENAME_LENGTH 255
+
+/*BMP version*/
+#define BITMAPCOREHEADER 12
+#define BITMAPINFOHEADER 40
+#define BITMAPV4HEADER 108
+#define BITMAPV5HEADER 124
+
+/*BMP intent type*/
+#define LCS_GM_BUSINESS 1
+#define LCS_GM_GRAPHICS 2
+#define LCS_GM_IMAGES 4
+#define LCS_GM_ABS_COLORIMETRIC	8
+
+/*BMP color profile (color space type)*/
+#define SRGB 0x73524742
+#define WIN 0x57696E20
+#define LINK 0x4C494E4B
+#define MBED 0x4D424544
+
+/*BMP compression type*/
+#define BI_RGB 0
+#define BI_RLE8 1
+#define BI_RLE4 2
+#define BI_BITFIELDS 3
+#define BI_JPEG 4
+#define BI_PNG 5
+#define BI_ALPHABITFIELDS 6
 
 typedef enum {
     ERR_OK,
@@ -35,7 +63,7 @@ typedef struct {
     char input_filename[MAX_FILENAME_LENGTH];
 } options_t;
 
-#pragma pack (push, 1)
+#pragma pack (push, 2)
 typedef struct {
 	unsigned short signature;
 	unsigned int filesize;
@@ -43,6 +71,18 @@ typedef struct {
 	unsigned short reserved2;
 	unsigned int pixel_arr_offset;
 } BMP_file_header_t;
+
+typedef struct {
+    unsigned int ciexyzX;
+    unsigned int ciexyzY;
+    unsigned int ciexyzZ;
+} BMP_ciexyz_t;
+
+typedef struct {
+    BMP_ciexyz_t Red;
+    BMP_ciexyz_t Green;
+    BMP_ciexyz_t Blue;
+} BMP_endpoints_t;
 
 typedef struct {
 	unsigned int header_size;
@@ -56,13 +96,29 @@ typedef struct {
 	unsigned int y_PPM;
 	unsigned int colors_in_color_table;
 	unsigned int important_color_count;
+
+    unsigned int red_channel_bitmask;
+    unsigned int green_channel_bitmask;
+    unsigned int blue_channel_bitmask;
+
+    unsigned int alpha_channel_bitmask;
+
+    unsigned int color_space_type;
+    BMP_endpoints_t color_space_endpoints;
+    unsigned int gamma_for_red_channel;
+    unsigned int gamma_for_green_channel;
+    unsigned int gamma_for_blue_channel;
+
+    unsigned int intent;
+    unsigned int ICC_profile_data;
+    unsigned int ICC_profile_size;
+    unsigned int reserved;
 } BMP_info_header_t;
 
 typedef struct {
 	BMP_file_header_t file_header;
 	BMP_info_header_t info_header;
 } BMP_info_struct_t;
-
 #pragma pack (pop)
 
 typedef struct {
