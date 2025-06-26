@@ -23,8 +23,14 @@ void print_PNG_info(file_meta_t* file_info) {
     default:
         printf("Color type: %d\n", file_info->png_info.color_type);
     }
-    printf("Bit depth: %u\nChannels: %u\n",\
-    file_info->png_info.bit_depth, file_info->png_info.channels);
+    printf("Bit depth: %u\n", file_info->png_info.bit_depth);
+    printf("Found %d text chunk(s):\n", file_info->png_info.chunks.num_text_chunks);
+    for (int i = 0; i < file_info->png_info.chunks.num_text_chunks; i++) {
+        printf("\t%s: %s\n", file_info->png_info.chunks.text_chunks[i].key, file_info->png_info.chunks.text_chunks[i].text);
+    }
+    if (file_info->png_info.chunks.has_time_chunk) {
+        printf("year %d month %d day %d\n", file_info->png_info.chunks.time_chunk.year, file_info->png_info.chunks.time_chunk.month, file_info->png_info.chunks.time_chunk.day);
+    }
 }
 
 void print_BMP_info(file_meta_t* file_info) {
@@ -37,6 +43,9 @@ void print_BMP_info(file_meta_t* file_info) {
     case BITMAPINFOHEADER:
         printf(" v.3\n");
         break;
+    case BITMAPV3HEADER:
+        printf(" v.3\n");
+        break;
     case BITMAPV4HEADER:
         printf(" v.4\n");
         break;
@@ -44,12 +53,13 @@ void print_BMP_info(file_meta_t* file_info) {
         printf(" v.5\n");
         break;
     default:
+        printf(" v.? header_size: %d bytes\n", bmp_format);
         break;
     }
     printf("Image resolution:\n");
     printf("\tWidth %d\n", file_info->bmp_info.info_header.width);
     printf("\tHeight %d\n", file_info->bmp_info.info_header.height);
-    printf("Image size: %d byte\n", file_info->bmp_info.info_header.image_size);
+    printf("Image size: %d bytes\n", file_info->bmp_info.info_header.image_size);
     printf("Bits per pixel (bit depth): %d\n", file_info->bmp_info.info_header.bits_per_pixel);
     printf("Planes (1 as default value): %d\n", file_info->bmp_info.info_header.planes);
     switch (file_info->bmp_info.info_header.compression)
@@ -88,7 +98,7 @@ void print_BMP_info(file_meta_t* file_info) {
         printf("\tGreen 0x%X\n", file_info->bmp_info.info_header.green_channel_bitmask);
         printf("\tBlue 0x%X\n", file_info->bmp_info.info_header.blue_channel_bitmask);
         printf("\tAlpha 0x%X\n", file_info->bmp_info.info_header.alpha_channel_bitmask);
-        if (bmp_format > BITMAPINFOHEADER) {
+        if (bmp_format > BITMAPV3HEADER) {
             switch (file_info->bmp_info.info_header.color_space_type) {
             case SRGB:
                 printf("Color space type: sRGB\n");

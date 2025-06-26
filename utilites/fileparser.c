@@ -6,10 +6,35 @@ void get_info_about_PNG(file_meta_t* meta, error_info_t* err, FILE* file){
     png_init_io(png_ptr, file);
     png_set_sig_bytes(png_ptr, PNG_SIG_LENGTH);
     png_read_info(png_ptr, info_ptr);
-    png_get_IHDR(png_ptr, info_ptr, &meta->png_info.width, &meta->png_info.height,
-       &meta->png_info.bit_depth, &meta->png_info.color_type, &meta->png_info.interlace_type,
-       &meta->png_info.compression_type, &meta->png_info.filter_method);
-    meta->png_info.channels = png_get_channels(png_ptr, info_ptr);
+    png_get_IHDR(png_ptr, info_ptr, &meta->png_info.width, &meta->png_info.height,\
+    &meta->png_info.bit_depth, &meta->png_info.color_type, &meta->png_info.interlace_type,\
+    &meta->png_info.compression_type, &meta->png_info.filter_method);
+
+    png_textp text_ptr = NULL;
+    int num_text = png_get_text(png_ptr, info_ptr, &text_ptr, NULL);
+    meta->png_info.chunks.num_text_chunks = num_text;
+    meta->png_info.chunks.text_chunks = NULL;
+
+    if (num_text > 0) {
+        meta->png_info.chunks.text_chunks = malloc(num_text * sizeof(png_textp));
+        if (meta->png_info.chunks.text_chunks) {
+            for (int i = 0; i < num_text; i++) {
+                meta->png_info.chunks.text_chunks[i].key = strdup(text_ptr[i].key);
+                meta->png_info.chunks.text_chunks[i].text = strdup(text_ptr[i].text ? text_ptr[i].text : "");
+            }
+        }
+        else {
+            set_err(err, ERR_MEM, ERROR_LOCATION_FILEPARSER);
+        }
+    }
+    png_timep time_ptr;
+    if (png_get_tIME(png_ptr, info_ptr, &time_ptr)) {
+        meta->png_info.chunks.has_time_chunk = 1;
+        meta->png_info.chunks.time_chunk = *time_ptr;
+    }
+    else {
+        meta->png_info.chunks.has_time_chunk = 0;
+    }
     png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
 }
 
@@ -57,6 +82,6 @@ void get_file_info(options_t* opt, error_info_t* err, file_meta_t* meta) {
         fclose(file);
     }
     else {
-        set_err(err, ERR_MEM, ERROR_LOCATION_FILEPARSER);
+        set_err(err, ERR_FILE, ERROR_LOCATION_FILEPARSER);
     }
 }

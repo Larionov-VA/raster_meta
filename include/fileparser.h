@@ -1,6 +1,7 @@
 #include "../include/structures.h"
 #include "../include/err.h"
 #include <png.h>
+#include <stdlib.h>
 #define ERROR_LOCATION_FILEPARSER "file: fileparser.c"
 #define PNG_SIG_LENGTH 8
 #define BMP_SIG_LENGTH 2

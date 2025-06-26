@@ -6,6 +6,7 @@
 /*BMP version*/
 #define BITMAPCOREHEADER 12
 #define BITMAPINFOHEADER 40
+#define BITMAPV3HEADER 56
 #define BITMAPV4HEADER 108
 #define BITMAPV5HEADER 124
 
@@ -31,16 +32,6 @@
 #define BI_ALPHABITFIELDS 6
 
 typedef enum {
-    ERR_OK,
-    ERR_MEM,
-    ERR_NOARGS,
-    ERR_EXTRAARGS,
-    ERR_DIR,
-    ERR_FILE,
-    ERR_INCORRECT_ARG
-} error_t;
-
-typedef enum {
     UNKNOWN,
     PNG,
     BMP,
@@ -52,6 +43,16 @@ typedef enum {
     RGB,
     RGB_ALPHA
 } color_type_t;
+
+typedef enum {
+    ERR_OK,
+    ERR_MEM,
+    ERR_NOARGS,
+    ERR_EXTRAARGS,
+    ERR_DIR,
+    ERR_FILE,
+    ERR_INCORRECT_ARG
+} error_t;
 
 typedef struct {
     error_t error_state;
@@ -122,14 +123,21 @@ typedef struct {
 #pragma pack (pop)
 
 typedef struct {
+    png_textp text_chunks;
+    int num_text_chunks;
+    png_time time_chunk;
+    int has_time_chunk;
+} png_chunks_info;
+
+typedef struct {
     unsigned width;
     unsigned height;
     int color_type;
     int bit_depth;
-    png_byte channels;
     unsigned compression_type;
     int interlace_type;
     unsigned filter_method;
+    png_chunks_info chunks;
 } PNG_info_struct_t;
 
 typedef struct {
