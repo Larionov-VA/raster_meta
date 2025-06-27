@@ -66,11 +66,11 @@ typedef struct {
 
 #pragma pack (push, 2)
 typedef struct {
-	unsigned short signature;
-	unsigned int filesize;
-	unsigned short reserved1;
-	unsigned short reserved2;
-	unsigned int pixel_arr_offset;
+    unsigned short signature;
+    unsigned int filesize;
+    unsigned short reserved1;
+    unsigned short reserved2;
+    unsigned int pixel_arr_offset;
 } BMP_file_header_t;
 
 typedef struct {
@@ -86,17 +86,17 @@ typedef struct {
 } BMP_endpoints_t;
 
 typedef struct {
-	unsigned int header_size;
-	unsigned int width;
-	unsigned int height;
-	unsigned short planes;
-	unsigned short bits_per_pixel;
-	unsigned int compression;
-	unsigned int image_size;
-	unsigned int x_PPM;
-	unsigned int y_PPM;
-	unsigned int colors_in_color_table;
-	unsigned int important_color_count;
+    unsigned int header_size;
+    unsigned int width;
+    unsigned int height;
+    unsigned short planes;
+    unsigned short bits_per_pixel;
+    unsigned int compression;
+    unsigned int image_size;
+    unsigned int x_PPM;
+    unsigned int y_PPM;
+    unsigned int colors_in_color_table;
+    unsigned int important_color_count;
 
     unsigned int red_channel_bitmask;
     unsigned int green_channel_bitmask;
@@ -123,10 +123,55 @@ typedef struct {
 #pragma pack (pop)
 
 typedef struct {
+    // tEXt chunk
     png_textp text_chunks;
     int num_text_chunks;
+    // tIME chunk
     png_time time_chunk;
     int has_time_chunk;
+    // gAMA chunk
+    double gamma;
+    int has_gama;
+    // cHRM chunk
+    double white_x, white_y;
+    double red_x, red_y;
+    double green_x, green_y;
+    double blue_x, blue_y;
+    int has_chrm;
+    // sRGB chunk
+    int srgb_intent;
+    int has_srgb;
+    // iCCP chunk
+    char* iccp_name;
+    png_bytep iccp_profile;
+    png_uint_32 iccp_proflen;
+    int iccp_compression;
+    int has_iccp;
+    // sBIT chunk
+    png_color_8 sbit;
+    int has_sbit;
+    // hIST chunk
+    png_uint_16p hist;
+    int has_hist;
+    // pHYs chunk
+    png_uint_32 phys_x, phys_y;
+    int phys_unit_type;
+    int has_phys; 
+    // bKGD chunk 
+    png_color_16 bkgd;
+    int has_bkgd;
+    // tRNS chunk
+    png_bytep trans_alpha;
+    int num_trans;
+    png_color_16 trans_color;
+    int has_trns;
+    // eXIf chunk
+    png_bytep exif;
+    png_uint_32 exif_length;
+    int has_exif;
+    // sPLT chunks
+    png_sPLT_tp splt_chunks;
+    int num_splt_chunks;
 } png_chunks_info;
 
 typedef struct {
