@@ -6,7 +6,8 @@
 /*BMP version*/
 #define BITMAPCOREHEADER 12
 #define BITMAPINFOHEADER 40
-#define BITMAPV3HEADER 56
+#define BITMAPV2INFOHEADER 52
+#define BITMAPV3INFOHEADER 56
 #define BITMAPV4HEADER 108
 #define BITMAPV5HEADER 124
 
@@ -152,6 +153,7 @@ typedef struct {
     int has_sbit;
     // hIST chunk
     png_uint_16p hist;
+    int num_hist_entries;
     int has_hist;
     // pHYs chunk
     png_uint_32 phys_x, phys_y;

@@ -2,7 +2,7 @@
 #include "./include/init_structures.h"
 #include "./include/argsparser.h"
 #include "./include/fileparser.h"
-#include "./include/outputinfo.h"
+#include "./include/output_info.h"
 
 int main(int argc, char* argv[]) {
     error_info_t err_struct = get_clear_error_struct();

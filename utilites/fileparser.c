@@ -91,10 +91,18 @@ void get_info_about_PNG(file_meta_t* meta, error_info_t* err, FILE* file) {
         meta->png_info.chunks.has_sbit = 0;
     }
 
-    png_uint_16p hist;
-    if (png_get_hIST(png_ptr, info_ptr, &hist)) {
+
+    png_uint_16p hist_ptr = NULL;
+    if (png_get_hIST(png_ptr, info_ptr, &hist_ptr)) {
         meta->png_info.chunks.has_hist = 1;
-        meta->png_info.chunks.hist = hist;
+        png_uint_32 num_entries = png_get_PLTE(png_ptr, info_ptr, NULL, NULL);
+        meta->png_info.chunks.num_hist_entries = num_entries;
+        meta->png_info.chunks.hist = malloc(num_entries * sizeof(png_uint_16));
+        if (meta->png_info.chunks.hist) {
+            memcpy(meta->png_info.chunks.hist, hist_ptr, num_entries * sizeof(png_uint_16));
+        } else { 
+            set_err(err, ERR_MEM, ERROR_LOCATION_FILEPARSER); 
+        }
     } else {
         meta->png_info.chunks.has_hist = 0;
     }
@@ -200,14 +208,14 @@ void get_file_info(options_t* opt, error_info_t* err, file_meta_t* meta) {
     if (file) {
         meta->format = get_file_format(file);
         switch (meta->format) {
-        case UNKNOWN:
-            set_err(err, ERR_FILE, ERROR_LOCATION_FILEPARSER);
-            break;
         case PNG:
             get_info_about_PNG(meta, err, file);
             break;
         case BMP:
             get_info_about_BMP(meta, err, file);
+            break;
+        case UNKNOWN:
+            set_err(err, ERR_FILE, ERROR_LOCATION_FILEPARSER);
             break;
         }
         fclose(file);
