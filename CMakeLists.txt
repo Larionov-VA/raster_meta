@@ -23,8 +23,9 @@ endif()
 set(SOURCE_LIB
     main.c
     utilites/init_stuctures.c
-    utilites/argsparser.c
-    utilites/fileparser.c
+    utilites/parsers/argsparser.c
+    utilites/parsers/fileparser.c
+    utilites/parsers/PNGparser.c
     utilites/err.c
     utilites/output/output_info.c
     utilites/output/output_PNG_info.c
