@@ -4,11 +4,9 @@ At the moment the project is in the development stage, but the main functions ar
 
 Technical requirements and dependencies:
 1. Works only on Linux (tested on Ubuntu).
-2. Requires libpng library.<br>
-To install: ```sudo apt install libpng-dev```.<br>
-3. Requires CMake.<br>
+2. Requires CMake.<br>
 To install: ```sudo apt install cmake```.<br>
-4. Makefile is supported by most systems by default, but if yours does not support it, you will need to install it too.<br>
+3. Makefile is supported by most systems by default, but if yours does not support it, you will need to install it too.<br>
 To install: ```sudo apt install make```.
 
 Instructions for use:

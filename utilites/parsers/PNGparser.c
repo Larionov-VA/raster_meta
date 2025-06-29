@@ -1,6 +1,5 @@
 #include "../../include/PNGparser.h"
 
-
 int init_png_reading(png_structp* png_ptr_out, png_infop* info_ptr_out, FILE* file, error_info_t* err) {
     int marker = 1;
     if (*png_ptr_out) {
