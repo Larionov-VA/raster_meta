@@ -37,6 +37,9 @@ void print_error_info(error_info_t* err) {
     case ERR_INCORRECT_ARG:
         print_err_INCORRECT_ARG(err);
         break;
+    case ERR_LIBPNG:
+        print_err_LIBPNG(err);
+        break;
     default:
         print_err_UNKNOWNERR(err);
         break;

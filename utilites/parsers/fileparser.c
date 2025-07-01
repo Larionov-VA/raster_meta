@@ -18,7 +18,7 @@ void get_file_info(options_t* opt, error_info_t* err, file_meta_t* meta) {
         fclose(file);
     }
     else {
-        set_err(err, ERR_FILE, ERROR_LOCATION_FILEPARSER);
+        set_err(err, ERR_INCORRECT_ARG, ERROR_LOCATION_FILEPARSER);
     }
 }
 
@@ -44,24 +44,34 @@ file_format_t get_file_format(FILE* file) {
 
 void get_info_about_PNG(file_meta_t* meta, error_info_t* err, FILE* file) {
     png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);;
-    png_infop info_ptr = png_create_info_struct(png_ptr);
-    if (init_png_reading(&png_ptr, &info_ptr, file, err)) {
-        skip_pixel_data(png_ptr, info_ptr);
-        read_IHDR(png_ptr, info_ptr, meta);
-        read_text_chunks(png_ptr, info_ptr, meta, err);
-        read_time_chunk(png_ptr, info_ptr, meta);
-        read_gama_chunk(png_ptr, info_ptr, meta);
-        read_chrm_chunk(png_ptr, info_ptr, meta);
-        read_srgb_chunk(png_ptr, info_ptr, meta);
-        read_iccp_chunk(png_ptr, info_ptr, meta, err);
-        read_sbit_chunk(png_ptr, info_ptr, meta);
-        read_hist_chunk(png_ptr, info_ptr, meta, err);
-        read_phys_chunk(png_ptr, info_ptr, meta);
-        read_bkgd_chunk(png_ptr, info_ptr, meta);
-        read_trns_chunk(png_ptr, info_ptr, meta);
-        read_exif_chunk(png_ptr, info_ptr, meta, err);
-        read_splt_chunks(png_ptr, info_ptr, meta, err);
-        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+    if (png_ptr) {
+        png_infop info_ptr = png_create_info_struct(png_ptr);
+        if (info_ptr) {
+            if (init_png_reading(&png_ptr, &info_ptr, file, err)) {
+                skip_pixel_data(png_ptr, info_ptr);
+                read_IHDR(png_ptr, info_ptr, meta);
+                read_text_chunks(png_ptr, info_ptr, meta, err);
+                read_time_chunk(png_ptr, info_ptr, meta);
+                read_gama_chunk(png_ptr, info_ptr, meta);
+                read_chrm_chunk(png_ptr, info_ptr, meta);
+                read_srgb_chunk(png_ptr, info_ptr, meta);
+                read_iccp_chunk(png_ptr, info_ptr, meta, err);
+                read_sbit_chunk(png_ptr, info_ptr, meta);
+                read_hist_chunk(png_ptr, info_ptr, meta, err);
+                read_phys_chunk(png_ptr, info_ptr, meta);
+                read_bkgd_chunk(png_ptr, info_ptr, meta);
+                read_trns_chunk(png_ptr, info_ptr, meta);
+                read_exif_chunk(png_ptr, info_ptr, meta, err);
+                read_splt_chunks(png_ptr, info_ptr, meta, err);
+                png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+            } else {
+                set_err(err, ERR_LIBPNG, ERROR_LOCATION_FILEPARSER);
+            }
+        } else {
+            set_err(err, ERR_LIBPNG, ERROR_LOCATION_FILEPARSER);
+        }
+    } else {
+        set_err(err, ERR_LIBPNG, ERROR_LOCATION_FILEPARSER);
     }
 }
 

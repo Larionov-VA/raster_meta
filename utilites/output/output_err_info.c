@@ -28,6 +28,11 @@ void print_err_FILE(error_info_t* err) {
     printf("Last error in execution.\nProblems with the file, possibly corrupted or used by another process, which caused an error in the module: %s\nError code: %d\n", err->location, err->error_state);
 }
 
+void print_err_LIBPNG(error_info_t* err) {
+    print_err_count(err);
+    printf("Last error in execution.\nProblems with the file, An error occurred in the libpng library, possibly a problem with the file: %s\nError code: %d\n", err->location, err->error_state);
+}
+
 void print_err_INCORRECT_ARG(error_info_t* err) {
     print_err_count(err);
     printf("Last error in execution.\nThe arguments passed are invalid, the program cannot continue. Error location: %s\nError code: %d\n", err->location, err->error_state);

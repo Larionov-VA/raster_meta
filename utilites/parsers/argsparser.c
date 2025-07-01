@@ -29,7 +29,7 @@ void parse_args(int argc, char* argv[], error_info_t* err, options_t* options) {
         if (argc == 1 && !strcmp(options->input_filename, "")) {
             strcpy(options->input_filename, argv[0]);
         } else {
-            set_err(err, ERR_FILE, ERROR_LOCATION_ARGPARSER);
+            set_err(err, ERR_INCORRECT_ARG, ERROR_LOCATION_ARGPARSER);
         }
     }
 }

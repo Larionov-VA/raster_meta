@@ -52,6 +52,7 @@ typedef enum {
     ERR_EXTRAARGS,
     ERR_DIR,
     ERR_FILE,
+    ERR_LIBPNG,
     ERR_INCORRECT_ARG
 } error_t;
 
