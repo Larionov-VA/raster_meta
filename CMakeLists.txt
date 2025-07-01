@@ -30,6 +30,7 @@ set(SOURCE_LIB
     utilites/output/output_info.c
     utilites/output/output_PNG_info.c
     utilites/output/output_BMP_info.c
+    utilites/output/output_err_info.c
 )
 
 add_executable(main ${SOURCE_LIB})

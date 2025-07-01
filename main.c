@@ -15,5 +15,6 @@ int main(int argc, char* argv[]) {
             print_file_info(&file_info);
         }
     }
+    print_error_info(&err_struct);
     return err_struct.error_state;
 }
